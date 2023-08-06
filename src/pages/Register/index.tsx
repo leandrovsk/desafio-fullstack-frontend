@@ -64,7 +64,7 @@ export const Register = () => {
                     <>{errors.phone.message}</>
                 </p>
                 ) : <p></p>}
-                <button type="submit">Enviar</button>
+                <button type="submit">Cadastrar</button>
                 <button type="button" onClick={() => navigate("/")}>Voltar</button>
             </form>
         </Container>

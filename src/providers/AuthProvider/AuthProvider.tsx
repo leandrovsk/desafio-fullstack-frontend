@@ -4,7 +4,6 @@ import { api } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { AuthContextValues, AuthProviderProps, UserData } from "./types";
 import { toast } from "react-toastify";
-import { AxiosError } from "axios";
 
 
 export const AuthContext = createContext({} as AuthContextValues)
