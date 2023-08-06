@@ -1,40 +1,36 @@
-import React, { Dispatch } from "react"
-import { Contact } from "../../pages/Dashboard"
-import { useForm } from "react-hook-form"
-import { TContactRegisterData, contactRegisterSchema } from "./validator"
-import { Modal } from "../Modal"
-import { api } from "../../services/api"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { Modal } from "../Modal";
+import { api } from "../../services/api";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-
-interface ModalAddContactProps {
-    toggleAddContactsModal: () => void
-    setContacts: Dispatch<React.SetStateAction<Contact[]>>
+interface ModalDeleteUserProps {
+  toggleDeleteUserModal: () => void;
+  userId: string;
 }
 
-export const ModalAddContact = ({ toggleAddContactsModal, setContacts }: ModalAddContactProps) => {
-    const { register, handleSubmit } = useForm<TContactRegisterData>({
-        resolver: zodResolver(contactRegisterSchema)
-    })
+export const ModalDeleteUser = ({ toggleDeleteUserModal, userId }: ModalDeleteUserProps) => {
+  const navigate = useNavigate();
 
-    const createContact = async (data: TContactRegisterData) => {
-        const response = await api.post<Contact>("/contacts", data)
+  const deleteContact = async (userId: string) => {
+    try {
+      await api.delete(`/users/${userId}`);
 
-        setContacts(previousContacts => [response.data, ...previousContacts])
-        toggleAddContactsModal()
+      toggleDeleteUserModal();
+
+      localStorage.clear();
+
+      toast.warning("Seu usuário foi deletado com sucesso");
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    return (
-        <Modal toggleModal={toggleAddContactsModal}>
-            <form onSubmit={handleSubmit(createContact)}>
-                <label htmlFor="name">Nome</label>
-                <input type="name" id="name" {...register("name")}></input>
-                <label htmlFor="email">Email</label>
-                <input type="email" id="email" {...register("email")}></input>
-                <label htmlFor="phone">Telefone</label>
-                <input type="phone" id="phone" {...register("phone")}></input>
-                <button type="submit">Cadastrar</button>
-            </form>
-        </Modal>
-    )
-}
+  return (
+    <Modal toggleModal={toggleDeleteUserModal}>
+      <h3>Tem certeza que deseja deletar seu usuário?</h3>
+      <button onClick={() => deleteContact(userId)}>Deletar</button>
+    </Modal>
+  );
+};
