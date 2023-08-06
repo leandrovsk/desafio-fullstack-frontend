@@ -3,6 +3,7 @@ import { TLoginData } from "../../pages/Login/validator";
 import { api } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { AuthContextValues, AuthProviderProps, UserData } from "./types";
+import { toast } from "react-toastify";
 
 
 export const AuthContext = createContext({} as AuthContextValues)
@@ -48,10 +49,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
             localStorage.setItem("your-contacts:accessToken", accessToken)
 
+            toast.success("Login Efetuado com Sucesso!");
+
             setLoading(false)
 
             navigate("/dashboard")
         } catch (error) {
+            toast.error("Usuário ou senha incorretos!");
             console.log(error)
         }
     }
