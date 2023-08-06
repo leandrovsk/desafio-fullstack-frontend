@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import { Dispatch, MouseEvent } from "react";
 import { Contact } from "../../pages/Dashboard";
 import { Container } from "./styles";
 import contact_img from "../../assets/img/contact_img.png"
@@ -7,16 +7,16 @@ interface CardProps {
     contact: Contact
     setContacts: Dispatch<React.SetStateAction<Contact[]>>
     toggleDeleteContactModal: () => void
-    setContactId: Dispatch<React.SetStateAction<String>>
+    setContactId: Dispatch<React.SetStateAction<string>>
 }
 
 
 export const Card = ({ contact, setContacts, toggleDeleteContactModal, setContactId }: CardProps) => {
 
-    function handleClick(event: Event) {
+    function handleClick(event: MouseEvent) {
         const target = event.target as HTMLButtonElement;
         setContactId(target.parentElement!.parentElement!.id!)
-        return toggleDeleteContactModal()
+        toggleDeleteContactModal()
     }
     return (
         <Container id={contact.id}>
@@ -29,7 +29,7 @@ export const Card = ({ contact, setContacts, toggleDeleteContactModal, setContac
             <p>Data de Cadastro: {contact.createdAt}</p>
             <div>
                 <button type="button" onClick={() => console.log("clicou")}>Editar</button>
-                <button type="button" onClick={(event: Event) => handleClick(event)}>Excluir</button>
+                <button type="button" onClick={(event: MouseEvent) => handleClick(event)}>Excluir</button>
             </div>
         </Container>
     )

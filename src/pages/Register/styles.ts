@@ -5,6 +5,7 @@ export const Container = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100vh;
+    min-height: 750px;
     gap: 15px;
     align-items: center;
     justify-content: center;
@@ -24,7 +25,7 @@ export const Container = styled.div`
         justify-content: center;
         gap: 8px;
         width: 400px;
-        height: 600px;
+        height: 700px;
         padding: 40px;
         border-radius: 60px;
         border: 3px solid var(--color-primary);
@@ -53,6 +54,11 @@ export const Container = styled.div`
             border: 1px solid var(--color-primary);
             height: 35px;
             border-radius: 8px;
+        }
+        p {
+            height: 20px;
+            color: red;
+            font-size: 1.4rem;
         }
     }
 
