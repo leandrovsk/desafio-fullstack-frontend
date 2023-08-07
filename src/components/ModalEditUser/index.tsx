@@ -40,13 +40,13 @@ export const ModalUserEdit = ({ toggleEditUserModal }: ModalUserEditProps) => {
         setUserData(newUserData.data);
 
         toggleEditUserModal();
+        toast.success("Dados editados com sucesso");
       } catch (error) {
         toast.error("O email já está cadastrado no sistema");
       }
     } else {
       toast.error("Ao menos um campo precisa ser enviado");
     }
-    toast.success("Dados editados com sucesso");
   };
 
   return (
