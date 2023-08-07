@@ -1,28 +1,37 @@
+import React, { Dispatch } from "react";
 import { useForm } from "react-hook-form";
-import { TUserEditData, userEditSchema } from "./validator";
+import { contactEditSchema } from "./validator";
 import { Modal } from "../Modal";
 import { api } from "../../services/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userAuth } from "../../hooks/useAuth";
 import { toast } from "react-toastify";
+import { Contact } from "../../pages/Dashboard";
 
-interface ModalUserEditProps {
-  toggleEditUserModal: () => void;
+interface ModalContactEditProps {
+  toggleEditContactModal: () => void;
+  setContacts: Dispatch<React.SetStateAction<Contact[]>>;
+  contactId: string;
+  contacts: Contact[];
+  contactToEdit: Contact;
 }
 
-export const ModalUserEdit = ({ toggleEditUserModal }: ModalUserEditProps) => {
+export const ModalContactEdit = ({
+  toggleEditContactModal,
+  setContacts,
+  contactId,
+  contacts,
+  contactToEdit,
+}: ModalContactEditProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TUserEditData>({
-    resolver: zodResolver(userEditSchema),
+  } = useForm({
+    resolver: zodResolver(contactEditSchema),
     mode: "onChange",
   });
 
-  const { userData, setUserData } = userAuth();
-
-  const editUser = async (data: any) => {
+  const editContact = async (data: any) => {
     const dataKeys = Object.keys(data);
 
     dataKeys.forEach((key) => {
@@ -33,28 +42,29 @@ export const ModalUserEdit = ({ toggleEditUserModal }: ModalUserEditProps) => {
 
     if (Object.keys(data).length !== 0) {
       try {
-        const response = await api.get("/users");
+        const editedContact = await api.patch(`contacts/${contactId}`, data);
 
-        const newUserData = await api.patch(`users/${response.data.id}`, data);
+        const oldContacts = contacts.filter((contact) => contact.id !== contactId);
 
-        setUserData(newUserData.data);
+        setContacts([...oldContacts, editedContact.data]);
 
-        toggleEditUserModal();
+        toggleEditContactModal();
+
+        toast.success("Contato editado com sucesso");
       } catch (error) {
         toast.error("O email já está cadastrado no sistema");
       }
     } else {
       toast.error("Ao menos um campo precisa ser enviado");
     }
-    toast.success("Dados editados com sucesso");
   };
 
   return (
-    <Modal toggleModal={toggleEditUserModal}>
-      <form onSubmit={handleSubmit(editUser)}>
-        <h2>Editar Perfil</h2>
+    <Modal toggleModal={toggleEditContactModal}>
+      <form onSubmit={handleSubmit(editContact)}>
+        <h2>Editar Contato</h2>
         <label htmlFor="name">Nome</label>
-        <input type="name" id="name" {...register("name")} placeholder={userData.name}></input>
+        <input type="name" id="name" {...register("name")} placeholder={contactToEdit.name}></input>
         {errors.name ? (
           <p className="FormError">
             <>{errors.name?.message}</>
@@ -63,7 +73,7 @@ export const ModalUserEdit = ({ toggleEditUserModal }: ModalUserEditProps) => {
           <p></p>
         )}
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" {...register("email")} placeholder={userData.email}></input>
+        <input type="email" id="email" {...register("email")} placeholder={contactToEdit.email}></input>
         {errors.email ? (
           <p className="FormError">
             <>{errors.email?.message}</>
@@ -71,17 +81,8 @@ export const ModalUserEdit = ({ toggleEditUserModal }: ModalUserEditProps) => {
         ) : (
           <p></p>
         )}
-        <label htmlFor="phone">Senha</label>
-        <input type="password" id="password" {...register("password")} placeholder="********"></input>
-        {errors.password ? (
-          <p className="FormError">
-            <>{errors.password?.message}</>
-          </p>
-        ) : (
-          <p></p>
-        )}
         <label htmlFor="phone">Telefone</label>
-        <input type="phone" id="phone" {...register("phone")} placeholder={userData.phone}></input>
+        <input type="phone" id="phone" {...register("phone")} placeholder={contactToEdit.phone}></input>
         {errors.phone ? (
           <p className="FormError">
             <>{errors.phone?.message}</>
