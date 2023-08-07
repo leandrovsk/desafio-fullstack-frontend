@@ -1,27 +1,30 @@
-# React + TypeScript + Vite
+<h1 align="center">Desafio FullStack - API</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">Este é o frontend da aplicação Desafio Fullstack - Um sistema para criação e gerenciamento de contatos.</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  Back-End da aplicação:
+  <a href="https://github.com/leandrovsk/desafio-fullstack-backend">https://github.com/leandrovsk/desafio-fullstack-backend</a>
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<h2 align="center">Configuração Inicial</h2>
 
-## Expanding the ESLint configuration
+Clone o projeto em sua máquina e instale as dependências com o comando:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```shell
+yarn
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+<h3>Iniciando o Servidor Local</h3>
+
+Incie o servidor com o seguinte comando:
+
+```
+yarn dev
+```
+
+<h3>Acessando o Servidor Local</h3>
+
+```
+http://localhost:5173/
+```
