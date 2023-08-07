@@ -8,6 +8,7 @@ import { ModalUserEdit } from "../../components/ModalEditUser";
 import { userAuth } from "../../hooks/useAuth";
 import { ModalDeleteContact } from "../../components/ModalDeleteContact";
 import { ModalDeleteUser } from "../../components/ModalDeleteUser";
+import { ModalContactEdit } from "../../components/ModalEditContact";
 
 export interface Contact {
   id: string;
@@ -16,6 +17,14 @@ export interface Contact {
   phone: string;
   createdAt: string;
 }
+
+const defaulContact: Contact = {
+  id: "",
+  name: "",
+  phone: "",
+  email: "",
+  createdAt: "",
+};
 
 export const Dashboard = () => {
   const [editUserModalIsOpen, setEditUserModalIsOpen] = useState(false);
@@ -30,11 +39,15 @@ export const Dashboard = () => {
 
   const toggleAddContactsModal = () => setAddContactsModalIsOpen(!addContactsModalIsOpen);
 
-  const toggleEditContactModal = () => setEditContactsModalIsOpen(!editContactsModalIsOpen);
+  const toggleEditContactModal = () => {
+    setEditContactsModalIsOpen(!editContactsModalIsOpen);
+  };
 
   const toggleDeleteContactModal = () => setDeleteContactsModalIsOpen(!deleteContactsModalIsOpen);
 
   const [contacts, setContacts] = useState<Contact[]>([]);
+
+  const [contactToEdit, setContactToEdit] = useState<Contact>(defaulContact);
 
   const [contactId, setContactId] = useState("");
 
@@ -59,9 +72,10 @@ export const Dashboard = () => {
       <Card
         key={contact.id}
         contact={contact}
-        setContacts={setContacts}
         toggleDeleteContactModal={toggleDeleteContactModal}
+        toggleEditContactModal={toggleEditContactModal}
         setContactId={setContactId}
+        setContactToEdit={setContactToEdit}
       />
     ));
   };
@@ -97,13 +111,25 @@ export const Dashboard = () => {
         {deleteContactsModalIsOpen && (
           <ModalDeleteContact
             toggleDeleteContactsModal={toggleDeleteContactModal}
+            contacts={contacts}
             setContacts={setContacts}
             contactId={contactId}
           />
         )}
+        {editUserModalIsOpen && <ModalUserEdit toggleEditUserModal={toggleEditUserModal} />}
         {deleteUserModalIsOpen && (
           <ModalDeleteUser toggleDeleteUserModal={toggleDeleteUserModal} userId={userData.id} />
         )}
+        {editContactsModalIsOpen && (
+          <ModalContactEdit
+            toggleEditContactModal={toggleEditContactModal}
+            contactId={contactId}
+            setContacts={setContacts}
+            contactToEdit={contactToEdit}
+            contacts={contacts}
+          />
+        )}
+
         <main>
           <Board>{renderCards(contacts)}</Board>
         </main>

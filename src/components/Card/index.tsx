@@ -1,21 +1,34 @@
-import { Dispatch, MouseEvent } from "react";
+import { Dispatch } from "react";
 import { Contact } from "../../pages/Dashboard";
 import { Container } from "./styles";
 import contact_img from "../../assets/img/contact_img.png";
 
 interface CardProps {
   contact: Contact;
-  setContacts: Dispatch<React.SetStateAction<Contact[]>>;
   toggleDeleteContactModal: () => void;
   setContactId: Dispatch<React.SetStateAction<string>>;
+  toggleEditContactModal: () => void;
+  setContactToEdit: Dispatch<React.SetStateAction<Contact>>;
 }
 
-export const Card = ({ contact, setContacts, toggleDeleteContactModal, setContactId }: CardProps) => {
-  function handleClick(event: MouseEvent) {
-    const target = event.target as HTMLButtonElement;
-    setContactId(target.parentElement!.parentElement!.id!);
+export const Card = ({
+  contact,
+  toggleDeleteContactModal,
+  setContactId,
+  toggleEditContactModal,
+  setContactToEdit,
+}: CardProps) => {
+  const handleClickEditContact = (contactId: string, contact: Contact) => {
+    setContactId(contactId);
+    setContactToEdit(contact);
+    toggleEditContactModal();
+  };
+
+  const handleClickDeleteContact = (contactId: string) => {
+    setContactId(contactId);
     toggleDeleteContactModal();
-  }
+  };
+
   return (
     <Container id={contact.id}>
       <figure>
@@ -26,10 +39,10 @@ export const Card = ({ contact, setContacts, toggleDeleteContactModal, setContac
       <p>Telefone: {contact.phone}</p>
       <p>Data de Cadastro: {contact.createdAt}</p>
       <div>
-        <button type="button" onClick={() => console.log("clicou")}>
+        <button type="button" onClick={() => handleClickEditContact(contact.id, contact)}>
           Editar
         </button>
-        <button type="button" onClick={(event: MouseEvent) => handleClick(event)}>
+        <button type="button" onClick={() => handleClickDeleteContact(contact.id)}>
           Excluir
         </button>
       </div>
